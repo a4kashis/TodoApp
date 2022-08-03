@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static final theme = ThemeData(
-    fontFamily: 'poppins',
+    // textTheme: GoogleFonts.montserratTextTheme(),
+    fontFamily: GoogleFonts.montserrat().fontFamily,
   );
 }

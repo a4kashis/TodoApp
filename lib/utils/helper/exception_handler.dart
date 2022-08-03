@@ -11,12 +11,8 @@ class APIException implements Exception {
 class ExceptionHandler {
   ExceptionHandler._privateConstructor();
 
-  static APIException handleError(Exception error) {
-    if (error is Exception) {
-      return APIException(message: "");
-    } else {
-      return APIException(message: ErrorMessages.networkGeneral);
-    }
+  static APIException handleError(dynamic error) {
+    return APIException(message: error);
   }
 }
 

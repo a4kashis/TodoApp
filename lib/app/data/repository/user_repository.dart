@@ -1,19 +1,18 @@
-import 'package:todo/app/data/models/dto/response.dart';
-import 'package:todo/app/data/models/dto/user.dart';
-import 'package:todo/app/data/models/request/auth_request.dart';
-import 'package:todo/app/data/models/response/user_response.dart';
-import 'package:todo/app/data/values/urls.dart';
-import 'package:todo/base/base_reposiotry.dart';
-import 'package:todo/utils/helper/exception_handler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo/app/data/models/dto/User.dart';
 
-class UserRepository extends BaseRepositry {
+import 'package:todo/main.dart';
 
-  // Future<RepoResponse<User>> signUp(SignUpRequest data) async {
-  //   final response =
-  //       await controller.post(path: URLs.signUp, data: data.toJson());
-  //
-  //   return response is APIException
-  //       ? RepoResponse(error: response)
-  //       : RepoResponse(data: UserResponse.fromJson(response).data);
-  // }
+class UserRepository {
+  final CollectionReference _usersCollection = fireStore.collection('users');
+
+  Future<bool> pushUser(UserData data) async {
+    late final status;
+    await _usersCollection
+        .doc(data.userId)
+        .set(data.toJson())
+        .then((value) => status = true)
+        .catchError((error) => status = false);
+    return status;
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:todo/app/data/models/dto/user.dart';
+import 'package:todo/app/data/models/dto/User.dart';
 import 'package:todo/app/data/models/response/app_config_response.dart';
 
 class Storage {
@@ -13,12 +13,14 @@ class Storage {
   static void setAppConfig(AppConfig appConfig) =>
       _box.write(StorageKeys.APP_CONFIG, appConfig.toJson());
 
-  static User getUser() => User.fromJson(_box.read(StorageKeys.USER));
+  static UserData getUser() => UserData.fromJson(_box.read(StorageKeys.USER));
 
-  static void setUser(User? user) =>
+  static void setUser(UserData? user) =>
       _box.write(StorageKeys.USER, user?.toJson());
 
   static bool isUserExists() => _box.read(StorageKeys.USER) != null;
+
+  static Future<void> clearStorage() => _box.erase();
 }
 
 class StorageKeys {

@@ -19,4 +19,5 @@ class ErrorMessages {
   static const invalidOTP = 'Invalid OTP';
   static const invalidName = 'Invalid Name';
   static const invalidEmail = 'Invalid Email';
+  static const mandatory = 'Mandatory';
 }

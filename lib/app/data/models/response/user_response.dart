@@ -1,13 +1,13 @@
-import 'package:todo/app/data/models/dto/user.dart';
+import 'package:todo/app/data/models/dto/User.dart';
 
 class UserResponse {
-  late User? data;
+  late UserData? data;
   late int statusCode;
 
   UserResponse({required this.data, required this.statusCode});
 
   UserResponse.fromJson(Map<String, dynamic> json) {
-    this.data = json['data'] == null ? null : User.fromJson(json['data']);
+    this.data = json['data'] == null ? null : UserData.fromJson(json['data']);
     this.statusCode = json['statusCode'];
   }
 

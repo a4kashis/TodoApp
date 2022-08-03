@@ -5,6 +5,6 @@ class AppController extends BaseController<ConfigRepository> {
   @override
   void onInit() {
     super.onInit();
-    repository.saveAppConfig();
+    // repository.saveAppConfig();
   }
 }
