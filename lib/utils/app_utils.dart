@@ -10,6 +10,7 @@ class AppUtils {
   AppUtils._privateConstructor();
 
   static showSnackBar(String text) {
+    Get.closeAllSnackbars();
     Get.rawSnackbar(
         snackPosition: SnackPosition.TOP,
         borderRadius: 10.0,

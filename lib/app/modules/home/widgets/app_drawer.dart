@@ -21,7 +21,7 @@ class AppDrawer extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         children: [
           SizedBox(
-            height: Dimens.screenHeight / 5,
+            height: Dimens.screenHeight / 4.8,
             child: Stack(
               children: [
                 Image.asset(
@@ -79,6 +79,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text("Logout"),
             onTap: logout,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
           )
         ],
       ),

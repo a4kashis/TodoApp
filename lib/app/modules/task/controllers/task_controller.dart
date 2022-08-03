@@ -33,15 +33,17 @@ class TaskController extends BaseController<TaskRepository> {
   final RxBool isLoading = RxBool(false);
   final RxList<UserData> usersList = RxList();
   final RxList<UserData> tempUsersList = RxList();
+  final RxList<String> tempUserIDList = RxList();
+  final Rx<UserData> createdBy = UserData().obs;
 
   @override
   void onInit() {
-    getArguments();
     getUsers();
+    getArguments();
     super.onInit();
   }
 
-  void getArguments() {
+  void getArguments() async {
     if (Get.arguments != null) {
       TaskData arguments = Get.arguments;
       taskId.value = arguments.id ?? "";
@@ -50,8 +52,15 @@ class TaskController extends BaseController<TaskRepository> {
       description.controller.text = arguments.description ?? "";
       place.controller.text = arguments.place ?? "";
       time.controller.text = arguments.timeStamp ?? "";
-      tempUsersList.assignAll(arguments.users ?? []);
       isCompleted.value = arguments.isCompleted ?? false;
+      createdBy.value = arguments.createdBy ?? UserData();
+      tempUsersList.value = [];
+      tempUserIDList.value = [];
+      arguments.users?.forEach((element) {
+        tempUsersList.add(element);
+        tempUserIDList.add(element.userId ?? "");
+      });
+      generateShareWith();
     }
   }
 
@@ -82,7 +91,8 @@ class TaskController extends BaseController<TaskRepository> {
       );
 
       log("taskData ${jsonEncode(task.toJson())}");
-      bool response;
+      isLoading.value = true;
+      bool? response;
       if (taskId.isEmpty) {
         task.id = uuid.v1();
         response = await repository.addTask(task);
@@ -90,7 +100,7 @@ class TaskController extends BaseController<TaskRepository> {
         response = await repository.updateTask(task);
       }
       log("$response");
-
+      isLoading.value = false;
       if (response == true) {
         Get.back();
         AppUtils.showSnackBar("Request Successful");
@@ -100,24 +110,29 @@ class TaskController extends BaseController<TaskRepository> {
     }
   }
 
-  void getUsers() async {
+  getUsers() async {
     var response = await repository.getAllUsers();
     if (response != false) {
       usersList.assignAll(response);
     }
   }
 
-  void addItem(UserData user) {
-    if (tempUsersList.contains(user)) {
-      tempUsersList.remove(user);
+  handleUser(UserData user) {
+    if (tempUserIDList.contains(user.userId)) {
+      tempUserIDList.remove(user.userId);
+      tempUsersList.removeWhere((e) => e.userId == user.userId);
     } else {
       tempUsersList.add(user);
+      tempUserIDList.add(user.userId ?? "");
     }
+    generateShareWith();
+  }
+
+  generateShareWith() {
     shareWith.controller.text = "";
-    for (UserData user in tempUsersList)
+    for (var user in tempUsersList)
       shareWith.controller.text =
-          " ${shareWith.controller.text} ${user.name ?? ""}";
-    print(tempUsersList.length);
+          shareWith.controller.text + "| ${user.name ?? ""} ";
   }
 
   pickDate() async {

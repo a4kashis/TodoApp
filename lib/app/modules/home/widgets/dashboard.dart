@@ -79,7 +79,7 @@ class Dashboard extends GetView<HomeController> {
                           children: [
                             valueTile(
                                 title: "Personal",
-                                value: controller.personalCount.value
+                                value: (controller.personalCount.value)
                                     .toString()
                                     .padLeft(2, "0")),
                             valueTile(
@@ -103,9 +103,10 @@ class Dashboard extends GetView<HomeController> {
                                       CircularPercentIndicator(
                                         radius: 12.0,
                                         lineWidth: 2.6,
-                                        percent:
-                                            controller.completedCount.value /
-                                                controller.taskData.length,
+                                        percent: controller.taskData.length != 0
+                                            ? (controller.completedCount.value /
+                                                controller.taskData.length)
+                                            : 0,
                                         linearGradient: LinearGradient(colors: [
                                           AppColors.primaryColor,
                                           AppColors.secondaryColor,
@@ -113,7 +114,7 @@ class Dashboard extends GetView<HomeController> {
                                       ),
                                       SizedBox(width: Dimens.gapX1),
                                       Text(
-                                        "${(controller.completedCount.value / controller.taskData.length * 100).round()}% Done",
+                                        "${controller.taskData.length != 0 ? (controller.completedCount.value / controller.taskData.length * 100).round() : 0}% Done",
                                         style: Styles.tsGreyLight12,
                                       ),
                                     ],

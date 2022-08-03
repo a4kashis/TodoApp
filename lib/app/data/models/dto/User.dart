@@ -6,11 +6,11 @@ class UserData {
   String? profileUrl;
 
   UserData({
-    required this.userId,
-    required this.name,
-    required this.phone,
-    required this.email,
-    required this.profileUrl,
+    this.userId,
+    this.name,
+    this.phone,
+    this.email,
+    this.profileUrl,
   });
 
   UserData.fromJson(dynamic json) {

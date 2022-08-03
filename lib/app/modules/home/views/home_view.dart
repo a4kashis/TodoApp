@@ -5,6 +5,7 @@ import 'package:todo/app/data/values/dimens.dart';
 import 'package:todo/app/data/values/images.dart';
 import 'package:todo/app/modules/home/widgets/app_drawer.dart';
 import 'package:todo/app/modules/home/widgets/dashboard.dart';
+import 'package:todo/app/modules/home/widgets/todo_shimmer.dart';
 import 'package:todo/app/modules/home/widgets/todo_tile.dart';
 import 'package:todo/app/routes/app_pages.dart';
 import 'package:todo/app/theme/app_colors.dart';
@@ -32,15 +33,19 @@ class HomeView extends GetView<HomeController> {
                     Text("INBOX")
                         .paddingOnly(left: 30.0, bottom: 10.0, top: 20.0),
                     Obx(
-                      () => ListView.separated(
-                        itemCount: controller.taskData.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        itemBuilder: (ctx, i) =>
-                            TodoTile(taskData: controller.taskData[i]),
-                        separatorBuilder: (ctx, i) => Divider(height: 0.0),
-                      ),
+                      () => controller.isLoading.value
+                          ? TodoShimmer()
+                          : ListView.separated(
+                              itemCount: controller.taskData.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              itemBuilder: (ctx, i) =>
+                                  TodoTile(taskData: controller.taskData[i]),
+                              separatorBuilder: (ctx, i) =>
+                                  Divider(height: 0.0),
+                            ),
                     ),
                     Row(
                       children: [

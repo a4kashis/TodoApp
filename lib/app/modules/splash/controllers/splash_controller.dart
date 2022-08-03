@@ -10,7 +10,7 @@ class SplashController extends GetxController {
   }
 
   _startOnBoarding() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
 
     if (Storage.isUserExists())
       Get.offAllNamed(Routes.HOME);

@@ -10,6 +10,7 @@ import 'package:todo/app/routes/app_pages.dart';
 import 'package:todo/app/theme/app_colors.dart';
 import 'package:todo/app/theme/styles.dart';
 import 'package:todo/utils/app_utils.dart';
+import 'package:todo/utils/storage/storage_utils.dart';
 
 class TodoTile extends StatelessWidget {
   final TaskData taskData;
@@ -57,25 +58,43 @@ class TodoTile extends StatelessWidget {
             ),
           ),
           SizedBox(width: Dimens.gapX2),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(AppUtils.getFormattedDateTime(taskData.timeStamp ?? ""),
-                  style: Styles.tsBlackRegular12),
-              SizedBox(height: Dimens.gapX1),
-              if (taskData.users != null)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (UserData user in taskData.users!)
+          SizedBox(
+            width: Dimens.screenWidth / 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(AppUtils.getFormattedDateTime(taskData.timeStamp ?? ""),
+                    style: Styles.tsBlackRegular12),
+                SizedBox(height: Dimens.gapX1),
+                if (taskData.users != null)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(50.0),
-                        child: Image.network(user.profileUrl ?? "",
-                            height: 20, width: 20),
+                        child: Image.network(
+                            taskData.createdBy?.profileUrl ?? "",
+                            height: 20,
+                            width: 20),
                       ).paddingOnly(right: 2.0),
-                  ],
-                )
-            ],
+                      Container(
+                        height: 16.0,
+                        color: AppColors.black,
+                        width: 0.2,
+                        margin: const EdgeInsets.only(left: 2.0, right: 6.0),
+                      ),
+                      for (UserData user in taskData.users!)
+                        if (user.userId != Storage.getUser().userId)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50.0),
+                            child: Image.network(user.profileUrl ?? "",
+                                height: 20, width: 20),
+                          ),
+                    ],
+                  )
+              ],
+            ),
           )
         ],
       ).paddingSymmetric(vertical: 20.0, horizontal: 24.0),

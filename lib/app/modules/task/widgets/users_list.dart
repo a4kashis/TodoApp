@@ -10,37 +10,38 @@ class UsersList extends GetView<TaskController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: Dimens.screenWidthX12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Users", style: Styles.tsWhiteLight14),
-            SizedBox(height: 10.0),
-            Divider(color: AppColors.white, thickness: 0.1),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.zero,
-              itemCount: controller.usersList.length,
-              itemBuilder: (ctx, i) => ListTile(
+    print("widget built ${controller.tempUsersList.length}");
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: Dimens.screenWidthX12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("Users", style: Styles.tsWhiteLight14),
+          SizedBox(height: 10.0),
+          Divider(color: AppColors.white, thickness: 0.1),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemCount: controller.usersList.length,
+            itemBuilder: (ctx, i) => Obx(
+              () => ListTile(
                 title: Text(
                   controller.usersList[i].name ?? "",
                   style: Styles.tsWhiteLight14,
                 ),
-                onTap: () => controller.addItem(controller.usersList[i]),
+                onTap: () => controller.handleUser(controller.usersList[i]),
                 trailing: Obx(
-                  () =>
-                      controller.tempUsersList.contains(controller.usersList[i])
-                          ? Icon(Icons.check, color: AppColors.secondaryColor)
-                          : SizedBox(),
+                  () => controller.tempUserIDList
+                          .contains(controller.usersList[i].userId ?? "")
+                      ? Icon(Icons.check, color: AppColors.secondaryColor)
+                      : SizedBox(),
                 ),
               ),
-              separatorBuilder: (ctx, i) => SizedBox(height: 8.0),
             ),
-          ],
-        ),
+            separatorBuilder: (ctx, i) => SizedBox(height: 8.0),
+          ),
+        ],
       ),
     );
   }

@@ -17,6 +17,7 @@ class AuthSignupView extends GetView<AuthSignupController> {
       backgroundColor: AppColors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             AppImages.loginHeader,
@@ -24,59 +25,65 @@ class AuthSignupView extends GetView<AuthSignupController> {
             fit: BoxFit.fill,
             color: AppColors.primaryColor,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: SizedBox(
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
                     width: Dimens.screenWidth / 3,
                     child: Hero(
                         tag: AppImages.icAppLogo,
                         child: Image.asset(
                           AppImages.icAppLogo,
                         ))),
-              ),
-              SizedBox(height: Dimens.gapX3),
-              Text(
-                "YOUR\nTHING",
-                style: GoogleFonts.titanOne(
-                    fontSize: 44,
-                    color: AppColors.primaryColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 6.0),
-              Text(
-                "Making life Easier !",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: Dimens.gapX5),
-              Obx(
-                () => PrimaryFilledButton(
-                  child: controller.isLoading.value
-                      ? CircularProgressIndicator()
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              AppImages.icGoogle,
-                              height: 30.0,
-                            ),
-                            SizedBox(width: 10.0),
-                            Text(
-                              "One Tap Login",
-                              style: Styles.tsWhiteLight14,
-                            ),
-                          ],
-                        ),
-                  onTap: controller.isLoading.value ? null : controller.signup,
-                  color: AppColors.primaryColor,
+                SizedBox(height: Dimens.gapX3),
+                Text(
+                  "YOUR\nTHING",
+                  style: GoogleFonts.titanOne(
+                      fontSize: 44,
+                      color: AppColors.primaryColor,
+                      fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
                 ),
-              )
-            ],
-          ).paddingSymmetric(horizontal: 24.0, vertical: 16.0),
+                SizedBox(height: 6.0),
+                Text(
+                  "Making life Easier !",
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: Dimens.gapX3),
+                Obx(
+                  () => PrimaryFilledButton(
+                    child: controller.isLoading.value
+                        ? CircularProgressIndicator()
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                AppImages.icGoogle,
+                                height: 30.0,
+                              ),
+                              SizedBox(width: 10.0),
+                              Text(
+                                "One Tap Login",
+                                style: Styles.tsWhiteLight14,
+                              ),
+                            ],
+                          ),
+                    onTap:
+                        controller.isLoading.value ? null : controller.signup,
+                    color: AppColors.primaryColor,
+                  ),
+                )
+              ],
+            ).paddingSymmetric(
+              horizontal: 24.0,
+            ),
+          ),
+          SizedBox(height: 160)
         ],
       ),
     );

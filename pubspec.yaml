@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   google_fonts: ^3.0.1
   font_awesome_flutter: ^10.1.0
+  shimmer: ^2.0.0
 
   # GetX
   get: ^4.6.5
@@ -30,10 +31,11 @@ dependencies:
   percent_indicator: ^4.2.2
 
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-#  flutter_lints: ^2.0.1
 
 
 flutter:
