@@ -1,20 +1,19 @@
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:todo/app/routes/app_pages.dart';
 import 'package:todo/utils/storage/storage_utils.dart';
 
-class SplashController extends GetxController {
-  @override
-  void onInit() {
-    super.onInit();
-    _startOnBoarding();
+class SplashController extends ChangeNotifier {
+  void onInit(BuildContext context) {
+    _startOnBoarding(context);
   }
 
-  _startOnBoarding() async {
+  _startOnBoarding(BuildContext context) async {
     await Future.delayed(Duration(seconds: 3));
 
     if (Storage.isUserExists())
-      Get.offAllNamed(Routes.HOME);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (route) => false);
     else
-      Get.offAllNamed(Routes.AUTH_SIGNUP);
+      Navigator.pushNamedAndRemoveUntil(
+          context, Routes.AUTH_SIGNUP, (route) => false);
   }
 }

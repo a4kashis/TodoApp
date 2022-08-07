@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:todo/app/data/values/strings.dart';
 
 String? mandatoryValidator(String? value) {

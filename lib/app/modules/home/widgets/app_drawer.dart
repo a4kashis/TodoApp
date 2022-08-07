@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:todo/app/data/models/dto/User.dart';
 import 'package:todo/app/data/values/dimens.dart';
 import 'package:todo/app/data/values/images.dart';
@@ -21,7 +21,7 @@ class AppDrawer extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         children: [
           SizedBox(
-            height: Dimens.screenHeight / 4.8,
+            height: MediaQuery.of(context).size.height / 4.8,
             child: Stack(
               children: [
                 Image.asset(
@@ -33,43 +33,52 @@ class AppDrawer extends StatelessWidget {
                 Container(
                   color: AppColors.black.withOpacity(0.4),
                   child: SafeArea(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            AppUtils.imageHandler(user.profileUrl ?? "",
-                                height: 70, width: 70, borderRadius: 100),
-                            SizedBox(width: 20.0),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${user.name ?? ""}",
-                                    style: Styles.tsWhiteRegular18
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    "${user.email}",
-                                    style: Styles.tsBlackRegular12
-                                        .copyWith(color: AppColors.white),
-                                  ),
-                                  if (user.phone != null)
-                                    if (user.phone!.isNotEmpty)
-                                      Text(
-                                        "${user.phone}",
-                                        style: Styles.tsBlackRegular12
-                                            .copyWith(color: AppColors.white),
-                                      ).paddingOnly(top: 8.0),
-                                ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              AppUtils.imageHandler(user.profileUrl ?? "",
+                                  height: 70, width: 70, borderRadius: 100),
+                              SizedBox(width: 20.0),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${user.name ?? ""}",
+                                      style: Styles.tsWhiteRegular18.copyWith(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    SizedBox(height: 4.0),
+                                    Text(
+                                      "${user.email}",
+                                      style: Styles.tsBlackRegular12
+                                          .copyWith(color: AppColors.white),
+                                    ),
+                                    if (user.phone != null)
+                                      if (user.phone!.isNotEmpty)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            "${user.phone}",
+                                            style: Styles.tsBlackRegular12
+                                                .copyWith(
+                                                    color: AppColors.white),
+                                          ),
+                                        ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 24.0, vertical: 24.0),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -78,7 +87,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("Logout"),
-            onTap: logout,
+            onTap: () => logout(context),
             contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
           )
         ],
@@ -86,8 +95,9 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  logout() async {
+  logout(context) async {
     await Storage.clearStorage();
-    Get.offAllNamed(Routes.AUTH_SIGNUP);
+    Navigator.pushNamedAndRemoveUntil(
+        context, Routes.AUTH_SIGNUP, (route) => false);
   }
 }

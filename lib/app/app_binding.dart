@@ -1,15 +1,16 @@
-import 'package:get/get.dart';
-import 'package:todo/app/app_controller.dart';
-import 'package:todo/app/data/repository/config_repository.dart';
-import 'package:todo/app/data/repository/task_repository.dart';
-import 'package:todo/app/data/repository/user_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:nested/nested.dart';
+import 'package:todo/app/modules/auth/signup/controllers/auth_signup_controller.dart';
+import 'package:todo/app/modules/home/controllers/home_controller.dart';
+import 'package:todo/app/modules/splash/controllers/splash_controller.dart';
+import 'package:todo/app/modules/task/controllers/task_controller.dart';
 
-class AppBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.put(ConfigRepository(), permanent: true);
-    Get.put(UserRepository(), permanent: true);
-    Get.put(TaskRepository(), permanent: true);
-    Get.put(AppController(), permanent: true);
-  }
+List<SingleChildWidget> getAllProviders(BuildContext context) {
+  return [
+    ChangeNotifierProvider(create: (context) => SplashController()),
+    ChangeNotifierProvider(create: (context) => AuthSignupController()),
+    ChangeNotifierProvider(create: (context) => HomeController()),
+    ChangeNotifierProvider(create: (context) => TaskController()),
+  ];
 }

@@ -9,6 +9,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+
+
   # UI
   cupertino_icons: ^1.0.5
   google_fonts: ^3.0.1
@@ -16,8 +18,8 @@ dependencies:
   shimmer: ^2.0.0
 
   # GetX
-  get: ^4.6.5
   get_storage: ^2.0.3
+  provider: ^6.0.3
 
   # Firebase
   firebase_core: ^1.20.0

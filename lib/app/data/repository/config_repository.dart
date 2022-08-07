@@ -1,7 +1,6 @@
 import 'package:todo/app/data/models/response/app_config_response.dart';
 import 'package:todo/app/data/values/urls.dart';
 
-import 'package:todo/utils/helper/exception_handler.dart';
 import 'package:todo/utils/storage/storage_utils.dart';
 
 class ConfigRepository {

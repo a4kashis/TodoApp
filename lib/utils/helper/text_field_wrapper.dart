@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class TextFieldWrapper {
-  final _controller = TextEditingController().obs;
+  TextEditingController _controller = TextEditingController();
 
-  TextEditingController get controller => this._controller.value;
+  TextEditingController get controller => this._controller;
 
-  set controller(TextEditingController value) => this._controller.value = value;
-
-  final RxString _errorText = RxString("");
-
-  String get errorText => this._errorText.value;
-
-  set errorText(String value) => this._errorText.value = value;
+  set controller(TextEditingController value) => this._controller = value;
 
   TextFieldWrapper() {
     controller = TextEditingController();
@@ -24,7 +17,7 @@ class TextFieldWrapper {
   }) {
     final wrap = TextFieldWrapper();
     wrap.controller = controller ?? TextEditingController();
-    wrap.errorText = errorText ?? "";
+
     return wrap;
   }
 }

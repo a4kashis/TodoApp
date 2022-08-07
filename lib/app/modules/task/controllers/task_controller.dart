@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/app/data/models/dto/TaskData.dart';
 import 'package:todo/app/data/models/dto/User.dart';
 import 'package:todo/app/data/repository/task_repository.dart';
@@ -15,48 +16,43 @@ import 'package:todo/utils/helper/text_field_wrapper.dart';
 import 'package:todo/utils/storage/storage_utils.dart';
 import 'package:uuid/uuid.dart';
 
-class TaskController extends BaseController<TaskRepository> {
+class TaskController extends ChangeNotifier {
+  HomeController? homeController;
   final formKey = GlobalKey<FormState>();
-  final HomeController _homeController = Get.find();
-  final RxString type = RxString("Business");
-  final RxString taskId = RxString("");
-  final RxString thingType = RxString("Shopping");
-  final TextFieldWrapper title = TextFieldWrapper();
-  final TextFieldWrapper description = TextFieldWrapper();
-  final TextFieldWrapper place = TextFieldWrapper();
-  final TextFieldWrapper time = TextFieldWrapper();
-  final TextFieldWrapper shareWith = TextFieldWrapper();
-  final RxBool isCompleted = RxBool(false);
-  final List<String> typeList = const ["Business", "Personal"];
-  final DateTime today = DateTime.now();
-  final uuid = Uuid();
-  final RxBool isLoading = RxBool(false);
-  final RxList<UserData> usersList = RxList();
-  final RxList<UserData> tempUsersList = RxList();
-  final RxList<String> tempUserIDList = RxList();
-  final Rx<UserData> createdBy = UserData().obs;
+  final TaskRepository repository = TaskRepository();
+  String type = "Business";
+  String taskId = "";
+  String thingType = "Shopping";
+  TextFieldWrapper title = TextFieldWrapper();
+  TextFieldWrapper description = TextFieldWrapper();
+  TextFieldWrapper place = TextFieldWrapper();
+  TextFieldWrapper time = TextFieldWrapper();
+  TextFieldWrapper shareWith = TextFieldWrapper();
+  bool isCompleted = false;
+  List<String> typeList = const ["Business", "Personal"];
+  DateTime today = DateTime.now();
+  Uuid uuid = Uuid();
+  bool isLoading = false;
+  List<UserData> usersList = [];
+  List<UserData> tempUsersList = [];
+  List<String> tempUserIDList = [];
+  UserData createdBy = UserData();
 
-  @override
-  void onInit() {
+  void onInit(context, TaskData? task) {
+    homeController = Provider.of<HomeController>(context, listen: false);
     getUsers();
-    getArguments();
-    super.onInit();
-  }
-
-  void getArguments() async {
-    if (Get.arguments != null) {
-      TaskData arguments = Get.arguments;
-      taskId.value = arguments.id ?? "";
-      title.controller.text = arguments.title ?? "";
-      type.value = arguments.type ?? "";
-      description.controller.text = arguments.description ?? "";
-      place.controller.text = arguments.place ?? "";
-      time.controller.text = arguments.timeStamp ?? "";
-      isCompleted.value = arguments.isCompleted ?? false;
-      createdBy.value = arguments.createdBy ?? UserData();
-      tempUsersList.value = [];
-      tempUserIDList.value = [];
-      arguments.users?.forEach((element) {
+    if (task != null) {
+      taskId = task.id ?? "";
+      title.controller.text = task.title ?? "";
+      type = task.type ?? "";
+      description.controller.text = task.description ?? "";
+      place.controller.text = task.place ?? "";
+      time.controller.text = task.timeStamp ?? "";
+      isCompleted = task.isCompleted ?? false;
+      createdBy = task.createdBy ?? UserData();
+      tempUsersList = [];
+      tempUserIDList = [];
+      task.users?.forEach((element) {
         tempUsersList.add(element);
         tempUserIDList.add(element.userId ?? "");
       });
@@ -64,34 +60,42 @@ class TaskController extends BaseController<TaskRepository> {
     }
   }
 
-  deleteTask() async {
-    bool response = await repository.deleteTask(taskId.value);
+  updateType(context, value) {
+    Navigator.pop(context);
+    thingType = value;
+    notifyListeners();
+  }
+
+  deleteTask(context) async {
+    bool response = await repository.deleteTask(taskId);
     if (response == true) {
-      Get.back();
-      _homeController.getTasks();
+      Navigator.pop(context);
+      homeController?.getTasks();
       AppUtils.showSnackBar("Deleted Successfully");
     } else {
       AppUtils.showSnackBar(ErrorMessages.networkGeneral);
     }
   }
 
-  void saveTask() async {
+  void saveTask(context) async {
     if (formKey.currentState!.validate()) {
       TaskData task = TaskData(
-        id: taskId.value,
+        id: taskId,
         title: title.controller.text.trim(),
-        type: type.value,
+        type: type,
         description: description.controller.text.trim(),
         place: place.controller.text.trim(),
         timeStamp: time.controller.text.trim(),
         createdBy: Storage.getUser(),
         users: tempUsersList,
-        thingType: thingType.value,
-        isCompleted: isCompleted.value,
+        thingType: thingType,
+        isCompleted: isCompleted,
       );
 
       log("taskData ${jsonEncode(task.toJson())}");
-      isLoading.value = true;
+      isLoading = true;
+      notifyListeners();
+
       bool? response;
       if (taskId.isEmpty) {
         task.id = uuid.v1();
@@ -100,21 +104,29 @@ class TaskController extends BaseController<TaskRepository> {
         response = await repository.updateTask(task);
       }
       log("$response");
-      isLoading.value = false;
+      isLoading = false;
       if (response == true) {
-        Get.back();
+        Navigator.pop(context);
         AppUtils.showSnackBar("Request Successful");
-        _homeController.getTasks();
+        homeController?.getTasks();
         log("Successful");
       }
+      notifyListeners();
     }
   }
 
   getUsers() async {
     var response = await repository.getAllUsers();
     if (response != false) {
-      usersList.assignAll(response);
+      usersList = response;
+      print("userslength ${usersList.length}");
+      notifyListeners();
     }
+  }
+
+  updateCompletionStatus(value) {
+    isCompleted = value;
+    notifyListeners();
   }
 
   handleUser(UserData user) {
@@ -126,6 +138,7 @@ class TaskController extends BaseController<TaskRepository> {
       tempUserIDList.add(user.userId ?? "");
     }
     generateShareWith();
+    notifyListeners();
   }
 
   generateShareWith() {
@@ -135,9 +148,9 @@ class TaskController extends BaseController<TaskRepository> {
           shareWith.controller.text + "| ${user.name ?? ""} ";
   }
 
-  pickDate() async {
+  pickDate(context) async {
     DateTime? date = await showDatePicker(
-        context: Get.context!,
+        context: context,
         initialDate: today,
         firstDate: today,
         lastDate: DateTime(today.year + 1),
@@ -153,5 +166,19 @@ class TaskController extends BaseController<TaskRepository> {
     if (date != null) {
       time.controller.text = DateFormat("dd/MM/yyyy").format(date);
     }
+  }
+
+  void onDispose() {
+    type = "Business";
+    taskId = "";
+    title.controller.text = "";
+    description.controller.text = "";
+    place.controller.text = "";
+    time.controller.text = "";
+    isCompleted = false;
+    createdBy = UserData();
+    tempUsersList = [];
+    tempUserIDList = [];
+    shareWith.controller.text = "";
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:todo/app/theme/app_colors.dart';
 import 'package:todo/app/theme/styles.dart';
 import 'package:todo/utils/helper/text_field_wrapper.dart';
@@ -30,11 +30,12 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => InkWell(
-        onTap: onTap,
-        child: AbsorbPointer(
-          absorbing: onTap != null,
+    return InkWell(
+      onTap: onTap,
+      child: AbsorbPointer(
+        absorbing: onTap != null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14.0),
           child: TextFormField(
             controller: wrapper.controller,
             keyboardType: textInputType,
@@ -42,7 +43,6 @@ class CustomTextField extends StatelessWidget {
             textCapitalization: textCapitalization ?? TextCapitalization.none,
             cursorColor: AppColors.white,
             decoration: InputDecoration(
-              errorText: wrapper.errorText.isEmpty ? null : wrapper.errorText,
               isDense: true,
               counterText: "",
               hintText: label,
@@ -63,6 +63,6 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
       ),
-    ).paddingSymmetric(vertical: 14.0);
+    );
   }
 }

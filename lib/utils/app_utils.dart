@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:intl/intl.dart';
+import 'package:todo/app/app.dart';
 import 'package:todo/app/data/values/images.dart';
 import 'package:todo/app/theme/app_colors.dart';
 import 'package:todo/app/theme/styles.dart';
+import 'package:get/get.dart';
 import 'package:todo/widgets/buttons/primary_filled_button.dart';
 
 class AppUtils {
   AppUtils._privateConstructor();
 
   static showSnackBar(String text) {
-    Get.closeAllSnackbars();
-    Get.rawSnackbar(
-        snackPosition: SnackPosition.TOP,
-        borderRadius: 10.0,
-        borderColor: AppColors.primaryColor,
-        messageText: Text(text,
+    scaffoldKey.currentState?.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text(text,
             style: Styles.tsBlackMedium14
                 .copyWith(color: AppColors.white, letterSpacing: 0.2)),
         backgroundColor: AppColors.secondaryColor,
-        margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 14.0));
+        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
+        // snackPosition: SnackPosition.TOP,
+        // borderRadius: 10.0,
+        // borderColor: AppColors.primaryColor,
+      ),
+    );
   }
 
-  static getBottomSheet({required List<Widget> children}) => Get.bottomSheet(
-        ListView(
+  static getBottomSheet(context, {required List<Widget> children}) =>
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) => ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(
@@ -38,40 +45,7 @@ class AppUtils {
           ),
         ),
         isScrollControlled: true,
-        ignoreSafeArea: false,
         backgroundColor: AppColors.primaryColor,
-      );
-
-  static showCustomDialog(
-          {required List<Widget> children, isCloseEnabled = true}) =>
-      Get.dialog(
-        barrierDismissible: isCloseEnabled,
-        Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: Container(
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isCloseEnabled)
-                  Row(
-                    children: [
-                      Spacer(),
-                      InkWell(
-                        onTap: () => Get.back(),
-                        child: Icon(Icons.close, size: 18),
-                      )
-                    ],
-                  ),
-                for (Widget child in children) child,
-              ],
-            ),
-          ),
-        ),
       );
 
   static String getFormattedDateTime(String val) {
