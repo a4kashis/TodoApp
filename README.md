@@ -1,16 +1,12 @@
 # todo
 
-A new Flutter project.
+A Todo Application. 
 
-## Getting Started
+Download APK: 
+- https://drive.google.com/file/d/1lu04evl-_JMZkGT8fEk7VWIxMIORin1C/view?usp=sharing
 
-This project is a starting point for a Flutter application.
+<img src="https://user-images.githubusercontent.com/61688158/182604891-2dbfe91d-4061-4fd7-96bb-44936bd7870b.png" height="600">
 
-A few resources to get you started if this is your first Flutter project:
+<img src="https://user-images.githubusercontent.com/61688158/182605079-ad54628d-ff83-487d-89bf-7d0c820e7426.png" height="600">
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://user-images.githubusercontent.com/61688158/182605090-a0286d78-a724-4029-8288-8cda6a2b8ec2.png" height="600">
