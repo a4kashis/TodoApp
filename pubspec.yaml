@@ -9,14 +9,38 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  # UI
   cupertino_icons: ^1.0.5
+  google_fonts: ^3.0.1
+  font_awesome_flutter: ^10.1.0
+  shimmer: ^2.0.0
+
+  # GetX
+  get: ^4.6.5
+  get_storage: ^2.0.3
+
+  # Firebase
+  firebase_core: ^1.20.0
+  firebase_auth: ^3.6.1
+  cloud_firestore: ^3.4.2
+  google_sign_in: ^5.4.0
+
+  #Utilities
+  uuid: ^3.0.6
+  intl: ^0.17.0
+  percent_indicator: ^4.2.2
+
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
 
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/icons/
